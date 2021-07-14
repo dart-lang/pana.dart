@@ -380,6 +380,15 @@ class Tagger {
           final optOutViolationFinder = PathFinder<Uri>(
             LibraryGraph(_session, runtime.declaredVariables),
             (library) {
+              if (library.scheme == 'dart-ext') return null;
+              final resolvedPath = _session.uriConverter.uriToPath(library);
+              if (resolvedPath == null) {
+                return (path) => Explanation(
+                      'Unable to access import.',
+                      'Because:\n${LibraryGraph.formatPath(path)} where $library is inaccessible.',
+                      tag: _nullSafeTag,
+                    );
+              }
               final unit = parsedUnitFromUri(_session, library);
               if (unit == null) return null;
               final languageVersionToken = unit.languageVersionToken;

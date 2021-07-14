@@ -245,6 +245,25 @@ void main() {
         explanations: tagDetectionFailed,
       );
     });
+
+    test('dart-ext: import gets ignored', () async {
+      final descriptor = d.dir('cache', [
+        packageWithPathDeps(
+          'my_package',
+          sdkConstraint: '>=2.12.0 <3.0.0',
+          lib: [
+            d.file('my_package.dart', 'import "dart-ext:rpi_gpio_ext";'),
+          ],
+        ),
+      ]);
+      await descriptor.create();
+      final tagger = Tagger(p.join(descriptor.io.path, 'my_package'));
+      expectTagging(
+        tagger.nullSafetyTags,
+        tags: ['is:null-safe'],
+        explanations: isEmpty,
+      );
+    });
   });
 }
 

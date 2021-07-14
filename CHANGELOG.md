@@ -1,5 +1,6 @@
 ## 0.19.0
 
+* Fix null-safety classification issue with `dart-ext:` imports.
 * **BREAKING CHANGES**
   * Removed methods from public API: 
     `detectLicenseInContent`, `detectLicenseInDir`, `detectLicenseInFile`,
